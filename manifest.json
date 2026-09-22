@@ -1,0 +1,21 @@
+{
+  "formatVersion": 1,
+  "name": "めぶき",
+  "author": "Pocket Pet",
+  "rules": {
+    "hatchMinutes": 1,
+    "childMinutes": 60,
+    "adultMinutes": 1440,
+    "hungerDecayPerHour": 12,
+    "happinessDecayPerHour": 8,
+    "wasteEveryMinutes": 120,
+    "sleepHour": 21,
+    "wakeHour": 7
+  },
+  "stages": [
+    {"id": "egg", "name": "たねたまご", "image": "images/egg.png", "monochrome": true},
+    {"id": "baby", "name": "ちびめ", "image": "images/baby.png", "sleepingImage": "images/baby-sleep.gif", "monochrome": true},
+    {"id": "child", "name": "ふたば", "image": "images/child.png", "sleepingImage": "images/child-sleep.gif", "monochrome": true},
+    {"id": "adult", "name": "めぶき", "image": "images/adult.png", "sleepingImage": "images/adult-sleep.gif", "monochrome": true}
+  ]
+}

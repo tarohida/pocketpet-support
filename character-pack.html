@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="ぽけっとペットの使い方、お問い合わせ、プライバシーポリシー。3つのボタンで育てるドットペット。">
+<title>キャラクターパック形式 | ぽけっとペット</title><link rel="icon" href="mebuki.png"><link rel="stylesheet" href="style.css"></head>
+<body><header><a class="brand" href="index.html">ぽけっとペット<span>POCKET PET</span></a><nav aria-label="メイン"><a href="index.html">サポート</a><a href="privacy.html">プライバシー</a></nav></header>
+<main><article class="document"><h1>キャラクターパック v1</h1>
+<p>ZIPの直下に<code>manifest.json</code>、画像は<code>images/</code>以下に配置します。外側にフォルダーを付けないでください。</p>
+<pre><code>manifest.json
+images/egg.png
+images/baby.png
+images/child.png
+images/adult.png</code></pre>
+<p>完全なJSON例は<a href="manifest.json">manifest.json</a>を参照してください。全ルールの単位は実時間です。</p>
+<div class="table-scroll"><table><thead><tr><th>フィールド</th><th>意味・制約</th></tr></thead><tbody>
+<tr><td>formatVersion</td><td>整数1</td></tr>
+<tr><td>name</td><td>キャラクター名、1〜40文字</td></tr>
+<tr><td>author</td><td>作者名、80文字以下</td></tr>
+<tr><td>stages</td><td>egg / baby / child / adult の順に4要素</td></tr>
+<tr><td>stages[].id</td><td>上記の固定ID</td></tr>
+<tr><td>stages[].name</td><td>表示する段階名、1〜20文字</td></tr>
+<tr><td>stages[].image</td><td>省略可。images/以下のPNG/JPG/JPEG/GIFの相対パス。省略時は組み込みのドット絵</td></tr>
+<tr><td>stages[].sleepingImage</td><td>省略可。睡眠中に表示するPNG/JPG/JPEG/GIF。省略時は通常画像に小さな寝息の動きを付ける</td></tr>
+<tr><td>rules.hatchMinutes</td><td>誕生から孵化までの分、0.1以上</td></tr>
+<tr><td>rules.childMinutes</td><td>誕生からこどもまでの分、hatchMinutesより大きい</td></tr>
+<tr><td>rules.adultMinutes</td><td>誕生からおとなまでの分、childMinutesより大きく525600以下</td></tr>
+<tr><td>rules.hungerDecayPerHour</td><td>1時間あたりの空腹ゲージ減少、0〜100</td></tr>
+<tr><td>rules.happinessDecayPerHour</td><td>1時間あたりのごきげん減少、0〜100</td></tr>
+<tr><td>rules.wasteEveryMinutes</td><td>起きている間の排泄間隔、1〜10080分</td></tr>
+<tr><td>rules.sleepHour</td><td>就寝時刻、0〜23</td></tr>
+<tr><td>rules.wakeHour</td><td>起床時刻、0〜23。就寝時刻と異なる値</td></tr>
+</tbody></table></div>
+<p>睡眠中のゲージ減少は通常の35%。排泄物3個以上または空腹10以下で病気になります。空腹0では健康が毎時12、病気では毎時6、睡眠中に明かりがついていると毎時2減ります（合算）。これらがないと健康が毎時1回復します。現在のv1ではこの追加挙動は固定です。しつけはお世話の記録値で、進化分岐には使いません。成長は時刻だけで決まります。</p>
+<p>PNG/JPEGは最大2048×2048ピクセル、GIFは最大512×512・60フレーム・合計8,388,608画素、いずれも1ファイル4MB。透過PNGまたは白黒の低解像度GIFを推奨。GIFはフレームごとの時間で繰り返し再生します（1フレーム0.06〜10秒、未指定は0.1秒）。縦横比を維持して表示します。ZIP自体は24MB、展開後の合計20MB、項目数64件まで。ファイル名は大文字小文字を区別します。パックの画像・JSONだけを共有し、実行コードは読み込みません。</p>
+<p>例えば成体には<code>&quot;image&quot;: &quot;images/adult.png&quot;, &quot;sleepingImage&quot;: &quot;images/adult-sleep.gif&quot;, &quot;monochrome&quot;: true</code>を指定します。睡眠画像もZIP内に含めてください。設定の「キャラクター画像 → 成長段階 → おきているとき／ねているとき」から個別に読み込めます。<code>sleepingImage</code>を持たない既存のv1 ZIPも引き続き利用できます。</p>
+<p>読み込めない場合、ダイアログに理由を表示します。適用が成功したときだけローカル保存と表示を切り替えます。現在のペットの進行は交換前のルールで現在時刻まで進め、その後新ルールに切り替えます。</p>
+<p><code>stages[].monochrome</code>は省略可能な真偽値です。<code>true</code>では白背景の白黒画像をLCDに乗算合成し、白い余白を液晶色となじませます。省略・falseでは画像の色をそのまま表示します。同梱パック「めぶき」に使用しています。通常PNGと睡眠GIFの両方に適用され、共有・読込後も同じ見た目で動きます。</p>
+<h2>サンプルをダウンロード</h2>
+<p><a href="MebukiPack.zip">めぶきのキャラクターパック</a>を保存し、アプリの設定からZIPを読み込んでください。</p></article></main><footer>© 2026 Taro Hida<span>小さなペットと、のんびり暮らそう。</span></footer></body></html>
