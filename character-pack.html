@@ -20,6 +20,8 @@ images/adult.png</code></pre>
 <tr><td>stages[].name</td><td>表示する段階名、1〜20文字</td></tr>
 <tr><td>stages[].image</td><td>省略可。images/以下のPNG/JPG/JPEG/GIFの相対パス。省略時は組み込みのドット絵</td></tr>
 <tr><td>stages[].sleepingImage</td><td>省略可。睡眠中に表示するPNG/JPG/JPEG/GIF。省略時は通常画像に小さな寝息の動きを付ける</td></tr>
+<tr><td>gallery</td><td>省略可。並び替え候補となる画像パスの配列。4〜20枚、重複不可。先頭4枚を進化段階に使い、設定の「写真キャラクター」で並び替えられる</td></tr>
+<tr><td>poseSheets</td><td>省略可。通常画像のパスをキー、対応する状態シートのパスを値とする辞書。最大20組。シートは<code>images/</code>以下の288×288ピクセルの静止PNG</td></tr>
 <tr><td>rules.hatchMinutes</td><td>誕生から孵化までの分、0.1以上</td></tr>
 <tr><td>rules.childMinutes</td><td>誕生からこどもまでの分、hatchMinutesより大きい</td></tr>
 <tr><td>rules.adultMinutes</td><td>誕生からおとなまでの分、childMinutesより大きく525600以下</td></tr>
@@ -34,5 +36,20 @@ images/adult.png</code></pre>
 <p>例えば成体には<code>&quot;image&quot;: &quot;images/adult.png&quot;, &quot;sleepingImage&quot;: &quot;images/adult-sleep.gif&quot;, &quot;monochrome&quot;: true</code>を指定します。睡眠画像もZIP内に含めてください。設定の「キャラクター画像 → 成長段階 → おきているとき／ねているとき」から個別に読み込めます。<code>sleepingImage</code>を持たない既存のv1 ZIPも引き続き利用できます。</p>
 <p>読み込めない場合、ダイアログに理由を表示します。適用が成功したときだけローカル保存と表示を切り替えます。現在のペットの進行は交換前のルールで現在時刻まで進め、その後新ルールに切り替えます。</p>
 <p><code>stages[].monochrome</code>は省略可能な真偽値です。<code>true</code>では白背景の白黒画像をLCDに乗算合成し、白い余白を液晶色となじませます。省略・falseでは画像の色をそのまま表示します。同梱パック「めぶき」に使用しています。通常PNGと睡眠GIFの両方に適用され、共有・読込後も同じ見た目で動きます。</p>
+<h2>状態シート</h2>
+<p>各候補画像に対応する状態シートを指定すると、睡眠中とお世話中に専用の絵を表示できます。シートは96×96ピクセルのコマを3列×3行に並べた288×288ピクセルの静止PNGです。白黒ドット絵には<code>monochrome: true</code>を推奨します。</p>
+<div class="table-scroll"><table><thead><tr><th>行</th><th>左</th><th>中央</th><th>右</th></tr></thead><tbody>
+<tr><td>1</td><td>通常</td><td>睡眠</td><td>食事</td></tr>
+<tr><td>2</td><td>おやつ</td><td>遊び</td><td>掃除</td></tr>
+<tr><td>3</td><td>薬</td><td>しつけ</td><td>空白・予備</td></tr>
+</tbody></table></div>
+<pre><code>{
+  &quot;gallery&quot;: [&quot;images/photo-01.png&quot;, &quot;images/photo-02.png&quot;, &quot;images/photo-03.png&quot;, &quot;images/photo-04.png&quot;],
+  &quot;poseSheets&quot;: {
+    &quot;images/photo-01.png&quot;: &quot;images/photo-01-sheet.png&quot;,
+    &quot;images/photo-02.png&quot;: &quot;images/photo-02-sheet.png&quot;
+  }
+}</code></pre>
+<p>この例は<code>manifest.json</code>内の該当部分です。各キーは<code>stages[].image</code>または<code>gallery</code>にある画像パスと一致させ、各シートのパスは重複させずZIP内に含めてください。候補を並び替えても、状態シートは画像と一緒に移動します。状態シートがない画像は従来の通常画像・<code>sleepingImage</code>・共通のお世話演出を使います。状態シートがある画像では睡眠・お世話のコマを優先します。古いアプリでは未知の<code>poseSheets</code>項目を読み飛ばし、通常画像を表示します。</p>
 <h2>サンプルをダウンロード</h2>
 <p><a href="MebukiPack.zip">めぶきのキャラクターパック</a>を保存し、アプリの設定からZIPを読み込んでください。</p></article></main><footer>© 2026 Taro Hida<span>小さなペットと、のんびり暮らそう。</span></footer></body></html>
